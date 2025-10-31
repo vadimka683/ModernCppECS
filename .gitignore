@@ -1,0 +1,33 @@
+# В корне проекта создай файл .gitignore со следующим:
+
+# Visual Studio
+.vs/
+*.vcxproj
+*.sln
+*.filters
+*.user
+*.vcxproj.user
+
+# Build directories
+out/
+build/
+Debug/
+Release/
+x64/
+*.exe
+*.pdb
+*.ilk
+*.obj
+
+# CMake
+CMakeFiles/
+*.cmake
+CMakeCache.txt
+cmake_install.cmake
+.ninja_deps
+.ninja_log
+build.ninja
+
+# System
+.DS_Store
+Thumbs.db
