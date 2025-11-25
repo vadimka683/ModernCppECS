@@ -7,11 +7,6 @@
 #include "core/ecs/Components/RenderComponent.h"
 #include "core/ecs/Components/HealthComponent.h"
 
-enum class RemoveMode {
-	WithWarning,
-	Silent
-};
-
 Entity EntityManager::createEntity() {
 	Entity newEntity;
 	if (availableEntities.empty()) {
