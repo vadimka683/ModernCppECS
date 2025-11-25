@@ -5,6 +5,7 @@
 #include "Entity.h"
 struct TransformComponent;
 struct RenderComponent;
+struct VelocityComponent;
 class HealthComponent;
 
 enum class RemoveMode {
@@ -15,12 +16,14 @@ enum class RemoveMode {
 class EntityManager {
 private:
 	Entity nextEntityId = 1;
-	std::vector<Entity> availableEntities = {};
+		std::vector<Entity> availableEntities = {};
 	std::vector<TransformComponent> TransformComponents;
+	std::vector<VelocityComponent> VelocityComponents;
 	std::vector<RenderComponent> RenderComponents;
 	std::vector<HealthComponent> HealthComponents;
 
 	std::unordered_map<Entity, size_t> TransformComponentsMap;
+	std::unordered_map<Entity, size_t> VelocityComponentsMap;
 	std::unordered_map<Entity, size_t> RenderComponentsMap;
 	std::unordered_map<Entity, size_t> HealthComponentsMap;
 public:
@@ -32,6 +35,10 @@ public:
 	void addTransformComponent(Entity entity, TransformComponent&& component);
 	void removeTransformComponent(Entity entity, RemoveMode mode = RemoveMode::WithWarning);
 	TransformComponent* getTransformComponent(Entity entity);
+
+	void addVelocityComponent(Entity entity, VelocityComponent&& component);
+	void removeVelocityComponent(Entity entity, RemoveMode mode = RemoveMode::WithWarning);
+	VelocityComponent* getVelocityComponent(Entity entity);
 
 	void addRenderComponent(Entity entity, RenderComponent&& component);
 	void removeRenderComponent(Entity entity, RemoveMode mode = RemoveMode::WithWarning);
