@@ -12,6 +12,6 @@ namespace std {
 	template<>
 	void swap<RenderComponent>(RenderComponent& a, RenderComponent& b) {
 		using std::swap;
-		swap(a.symbol = b.symbol);
+		swap(a.symbol, b.symbol);
 	}
 }

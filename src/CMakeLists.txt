@@ -5,7 +5,6 @@ add_executable(RogalicPure
     core/InputManager.cpp
     core/Renderer.cpp
     core/Window.cpp
-    core/ecs/Component.cpp
     core/ecs/EntityManager.cpp
     core/ecs/System.cpp
     core/ecs/Components/HealthComponent.cpp

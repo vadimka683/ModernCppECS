@@ -19,10 +19,3 @@ public:
 		swap(a.isALive, b.isALive);
 	}
 };
-
-namespace std {
-	template<>
-	void swap<HealthComponent>(HealthComponent& a, HealthComponent& b) noexcept {
-		swap(a, b);
-	}
-}

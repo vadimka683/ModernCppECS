@@ -7,6 +7,11 @@
 #include "core/ecs/Components/RenderComponent.h"
 #include "core/ecs/Components/HealthComponent.h"
 
+enum class RemoveMode {
+	WithWarning,
+	Silent
+};
+
 Entity EntityManager::createEntity() {
 	Entity newEntity;
 	if (availableEntities.empty()) {
@@ -19,7 +24,11 @@ Entity EntityManager::createEntity() {
 	return newEntity;
 }
 
-void EntityManager::destroyEntity(Entity entity) {}
+void EntityManager::destroyEntity(Entity entity) {
+	removeHealthComponent(entity, RemoveMode::Silent);
+	removeRenderComponent(entity, RemoveMode::Silent);
+	removeTransformComponent(entity, RemoveMode::Silent);
+}
 void EntityManager::addTransformComponent(Entity entity, TransformComponent&& component) {
 	std::unordered_map<Entity,size_t>::iterator it = TransformComponentsMap.find(entity); 	// auto it = TransformComponentsMap.find(entity);
 	if (it == TransformComponentsMap.end()) {
@@ -48,30 +57,36 @@ void EntityManager::addHealthComponent(Entity entity, HealthComponent&& componen
 	}
 	std::cout << "Warning: HealthComponent already exists for entity " << entity << "\n";
 }
-void EntityManager::removeTransformComponent(Entity entity) {
+void EntityManager::removeTransformComponent(Entity entity, RemoveMode mode) {
 	std::unordered_map<Entity, size_t>::iterator it = TransformComponentsMap.find(entity);
 	if (it == TransformComponentsMap.end()) {
-		std::cout << "Warning: TransformComponent is not exist\n";
+		if (mode == RemoveMode::WithWarning) {
+			std::cout << "Warning: TransformComponent is not exist\n";
+		}
 		return;
 	}
 	std::swap(TransformComponents[it->second], TransformComponents.back());
 	TransformComponents.pop_back();
 	TransformComponentsMap.erase(entity);
 }
-void EntityManager::removeRenderComponent(Entity entity) {
+void EntityManager::removeRenderComponent(Entity entity, RemoveMode mode) {
 	auto it = RenderComponentsMap.find(entity);
-	if (it == TransformComponentsMap.end()) {
-		std::cout << "Warning: RenderComponent is not exist\n";
+	if (it == RenderComponentsMap.end()) {
+		if (mode == RemoveMode::WithWarning) {
+			std::cout << "Warning: RenderComponent is not exist\n";
+		}
 		return;
 	}
 	std::swap(RenderComponents[it->second], RenderComponents.back());
 	RenderComponents.pop_back();
 	RenderComponentsMap.erase(entity);
 }
-void EntityManager::removeHealthComponent(Entity entity) {
+void EntityManager::removeHealthComponent(Entity entity, RemoveMode mode) {
 	auto it = HealthComponentsMap.find(entity);
 	if (it == HealthComponentsMap.end()) {
-		std::cout << "Warning: RenderComponent is not exist\n";
+		if (mode == RemoveMode::WithWarning) {
+			std::cout << "Warning: HealthComponent is not exist\n";
+		}
 		return;
 	}
 	std::swap(HealthComponents[it->second], HealthComponents.back());
