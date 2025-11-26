@@ -7,6 +7,7 @@ struct VelocityComponent {
 	VelocityComponent() = default;
 	VelocityComponent(float dx, float dy): dx(dx), dy(dy){}
 	VelocityComponent(const VelocityComponent& other) = default;
+	VelocityComponent& operator=(const VelocityComponent& other) = default;
 };
 
 namespace std {

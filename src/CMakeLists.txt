@@ -9,7 +9,8 @@ add_executable(RogalicPure
     core/ecs/System.cpp
     core/ecs/Components/HealthComponent.cpp
     core/ecs/Systems/CombatSystem.cpp
-    core/ecs/Systems/MovementSystem.cpp)
+    core/ecs/Systems/MovementSystem.cpp 
+    core/ecs/Systems/PhysicsSystem.cpp )
 
 # Include папка на уровень выше
 target_include_directories(RogalicPure PUBLIC ${CMAKE_SOURCE_DIR}/include)

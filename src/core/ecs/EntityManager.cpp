@@ -7,6 +7,7 @@
 #include "core/ecs/Components/RenderComponent.h"
 #include "core/ecs/Components/HealthComponent.h"
 #include "core/ecs/Components/VelocityComponent.h"
+#include "core/ecs/Components/MoveIntentComponent.h"
 
 // *****ENTITY FUNC*****
 Entity EntityManager::createEntity() {
@@ -26,6 +27,7 @@ void EntityManager::destroyEntity(Entity entity) {
 	removeRenderComponent(entity, RemoveMode::Silent);
 	removeTransformComponent(entity, RemoveMode::Silent);
 	removeVelocityComponent(entity, RemoveMode::Silent);
+	removeMoveIntentComponent(entity, RemoveMode::Silent);
 	availableEntities.push_back(entity);
 }
 
@@ -49,6 +51,16 @@ void EntityManager::addVelocityComponent(Entity entity, VelocityComponent&& comp
 		return;
 	}
 	std::cout << "Warning: VelocityComponent already exists for entity " << entity << "\n";
+}
+
+void EntityManager::addMoveIntentComponent(Entity entity, MoveIntentComponent&& component) {
+	auto it = MoveIntentComponentsMap.find(entity);
+	if (it == MoveIntentComponentsMap.end()) {
+		MoveIntentComponents.push_back(component);
+		MoveIntentComponentsMap.emplace(entity, MoveIntentComponents.size() - 1);
+		return;
+	}
+	std::cout << "Warning: MoveIntentComponent already exists for entity " << entity << "\n";
 }
 void EntityManager::addRenderComponent(Entity entity, RenderComponent&& component) {
 	auto it = RenderComponentsMap.find(entity);
@@ -95,6 +107,19 @@ void EntityManager::removeVelocityComponent(Entity entity, RemoveMode mode) {
 	VelocityComponents.pop_back();
 	VelocityComponentsMap.erase(entity);
 }
+
+void EntityManager::removeMoveIntentComponent(Entity entity, RemoveMode mode) {
+	auto it = MoveIntentComponentsMap.find(entity);
+	if (it == MoveIntentComponentsMap.end()) {
+		if (mode == RemoveMode::WithWarning) {
+			std::cout << "Warning: VelocityComponent is not exist\n";
+		}
+		return;
+	}
+	std::swap(MoveIntentComponents[it->second], MoveIntentComponents.back());
+	MoveIntentComponents.pop_back();
+	MoveIntentComponentsMap.erase(entity);
+}
 void EntityManager::removeRenderComponent(Entity entity, RemoveMode mode) {
 	auto it = RenderComponentsMap.find(entity);
 	if (it == RenderComponentsMap.end()) {
@@ -133,10 +158,19 @@ TransformComponent* EntityManager::getTransformComponent(Entity entity) {
 VelocityComponent* EntityManager::getVelocityComponent(Entity entity) {
 	auto it = VelocityComponentsMap.find(entity);
 	if (it == VelocityComponentsMap.end()) {
-		std::cout << "Warning: TransformComponent is not exist\n";
+		std::cout << "Warning: VelocityComponent is not exist\n";
 		return nullptr;
 	}
 	return &VelocityComponents[it->second];
+}
+
+MoveIntentComponent* EntityManager::getMoveIntentComponent(Entity entity) {
+	auto it = MoveIntentComponentsMap.find(entity);
+	if (it == MoveIntentComponentsMap.end()) {
+		std::cout << "Warning: MoveIntentComponent is not exist\n";
+		return nullptr;
+	}
+	return &MoveIntentComponents[it->second];
 }
 
 RenderComponent* EntityManager::getRenderComponent(Entity entity){

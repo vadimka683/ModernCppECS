@@ -7,6 +7,7 @@ struct TransformComponent;
 struct RenderComponent;
 struct VelocityComponent;
 class HealthComponent;
+struct MoveIntentComponent;
 
 enum class RemoveMode {
 	WithWarning,
@@ -19,11 +20,13 @@ private:
 		std::vector<Entity> availableEntities = {};
 	std::vector<TransformComponent> TransformComponents;
 	std::vector<VelocityComponent> VelocityComponents;
+	std::vector<MoveIntentComponent> MoveIntentComponents;
 	std::vector<RenderComponent> RenderComponents;
 	std::vector<HealthComponent> HealthComponents;
 
 	std::unordered_map<Entity, size_t> TransformComponentsMap;
 	std::unordered_map<Entity, size_t> VelocityComponentsMap;
+	std::unordered_map<Entity, size_t> MoveIntentComponentsMap;
 	std::unordered_map<Entity, size_t> RenderComponentsMap;
 	std::unordered_map<Entity, size_t> HealthComponentsMap;
 public:
@@ -39,6 +42,10 @@ public:
 	void addVelocityComponent(Entity entity, VelocityComponent&& component);
 	void removeVelocityComponent(Entity entity, RemoveMode mode = RemoveMode::WithWarning);
 	VelocityComponent* getVelocityComponent(Entity entity);
+
+	void addMoveIntentComponent(Entity entity, MoveIntentComponent&& component);
+	void removeMoveIntentComponent(Entity entity, RemoveMode = RemoveMode::WithWarning);
+	MoveIntentComponent* getMoveIntentComponent(Entity entity);
 
 	void addRenderComponent(Entity entity, RenderComponent&& component);
 	void removeRenderComponent(Entity entity, RemoveMode mode = RemoveMode::WithWarning);
