@@ -15,7 +15,7 @@ enum class RemoveMode {
 };
 
 class EntityManager {
-private:
+public:
 	Entity nextEntityId = 1;
 		std::vector<Entity> availableEntities = {};
 	std::vector<TransformComponent> TransformComponents;
@@ -29,11 +29,17 @@ private:
 	std::unordered_map<Entity, size_t> MoveIntentComponentsMap;
 	std::unordered_map<Entity, size_t> RenderComponentsMap;
 	std::unordered_map<Entity, size_t> HealthComponentsMap;
-public:
 	EntityManager() = default;
 	EntityManager(const EntityManager& other) = default;
 	Entity createEntity();
 	void destroyEntity(Entity entity);
+
+	// Template func
+	template<typename Component>
+	bool hasComponent(Entity entity);
+
+	template<typename Component>
+	bool hasComponent(Entity entity) const;
 
 	void addTransformComponent(Entity entity, TransformComponent&& component);
 	void removeTransformComponent(Entity entity, RemoveMode mode = RemoveMode::WithWarning);

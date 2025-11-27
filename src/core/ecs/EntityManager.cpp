@@ -8,6 +8,7 @@
 #include "core/ecs/Components/HealthComponent.h"
 #include "core/ecs/Components/VelocityComponent.h"
 #include "core/ecs/Components/MoveIntentComponent.h"
+#include "core/ecs/ComponentTraits.h"
 
 // *****ENTITY FUNC*****
 Entity EntityManager::createEntity() {
@@ -29,6 +30,22 @@ void EntityManager::destroyEntity(Entity entity) {
 	removeVelocityComponent(entity, RemoveMode::Silent);
 	removeMoveIntentComponent(entity, RemoveMode::Silent);
 	availableEntities.push_back(entity);
+}
+
+// Template func
+
+template<typename Component>
+bool EntityManager::hasComponent(Entity entity) {
+	static_assert(ComponentTraits<Component>::is_registered, "Component is'not registered");
+	auto& Map = ComponentTraits<Component>::getMap(*this);
+	return Map.find(entity) != Map.end();
+}
+
+template<typename Component>
+bool EntityManager::hasComponent(Entity entity) const {
+	static_assert(ComponentTraits<Component>::is_registered, "Component is'not registered");
+	const auto& Map = ComponentTraits<Component>::getMap(*this);
+	return Map.find(entity) != Map.end();
 }
 
 // *****ADD COMPONENT*****
